@@ -27,7 +27,7 @@ def listador_de_databases(ip:str , user:str , password:str):
     databases = [database[0] for database in databases]
     
     # Eliminar las bases 'master' 'information_schema' 'performance_schema' 'mysql' de la lista
-    borrar = ['master', 'information_schema', 'performance_schema', 'mysql']
+    borrar = ['master', 'information_schema', 'performance_schema', 'mysql', 'sys_nacional']
     for i in borrar:
         databases.remove(i)
 
