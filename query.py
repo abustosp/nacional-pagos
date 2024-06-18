@@ -119,8 +119,26 @@ def obtener_pagos_masivos(ip:str , user:str , password:str , desde:str , hasta:s
     for i in bases:
         try:
             conección = get_connection(ip , i , user , password)
-            datos = query_pago(conección, desde, hasta)
-            datos.to_excel(f'resultados/datos - {i} - {desde} - {hasta}.xlsx', index=False)
+            pago = query_pago(conección, desde, hasta)
+            iva = query_IVA(conección, desde, hasta)
+            
+            # realizar tablas dinámicas
+            
+            iva_td_periodo = pd.pivot_table(iva, values='total', index=['modulo','razon_social','persona'], columns=['periodo'], aggfunc='sum', fill_value=0)
+            # mostrar en la tavla dinámica los indices en todas las filas
+            iva_td_periodo = iva_td_periodo.reset_index()
+            
+            iva_td_resumen = pd.pivot_table(iva, values='total', index=['modulo','razon_social','persona'], aggfunc='sum', fill_value=0)
+            # mostrar en la tavla dinámica los indices en todas las filas
+            iva_td_resumen = iva_td_resumen.reset_index()
+            
+            # Exportar a un mismo excel
+            with pd.ExcelWriter(f'resultados/datos - {i} - {desde} - {hasta}.xlsx') as writer:
+                pago.to_excel(writer, sheet_name='Pagos', index=False)
+                iva.to_excel(writer, sheet_name='IVA', index=False)
+                iva_td_periodo.to_excel(writer, sheet_name='IVA_TD_periodo', index=False)
+                iva_td_resumen.to_excel(writer, sheet_name='IVA_TD_resumen', index=False)
+            print(f'Base de datos {i} exportada correctamente')
         except:
             print(f'Error en la base de datos {i}')
             
