@@ -64,12 +64,12 @@ def query_pago(connection:Connection, desde:str, hasta:str):
         hasta (str): fecha de fin de la consulta
     """
 
-    # Crear de pagos
+    # Crear query de pagos
     query = text(f"""
-    SELECT cmp_pago_medio.*, cmp_pago.*, cmp_proveedor.razon_social
+    SELECT cmp_pago_medio.*, cmp_pago.*, iva_persona.razon_social
     FROM cmp_pago_medio
     LEFT JOIN cmp_pago ON cmp_pago_medio.pago = cmp_pago.numero 
-    LEFT JOIN cmp_proveedor ON cmp_pago.proveedor = cmp_proveedor.id
+    LEFT JOIN iva_persona ON cmp_pago.proveedor = iva_persona.id
     where cmp_pago.fecha BETWEEN :desde AND :hasta;""")
 
     # Realizar consulta y guardar en un DataFrame
