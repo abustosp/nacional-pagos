@@ -77,6 +77,31 @@ def query_pago(connection:Connection, desde:str, hasta:str):
 
     return tabla
 
+def query_IVA(connection:Connection, desde:str, hasta:str):
+    """
+    Realizar una consulta a la base de datos
+
+    Args:
+        connection (Connection): conexión a la base de datos
+        desde (str): fecha de inicio de la consulta
+        hasta (str): fecha de fin de la consulta
+    """
+
+    # Crear query de IVA
+    query = text(f"""
+    SELECT iva_comprobante.modulo, iva_comprobante.tipo, comprobante, persona, iva_persona.razon_social, fecha, periodo , total
+    FROM iva_comprobante
+    LEFT JOIN iva_persona ON iva_comprobante.persona = iva_persona.id
+    where fecha BETWEEN :desde AND :hasta;""")
+
+    # Realizar consulta y guardar en un DataFrame
+    tabla = pd.read_sql_query(query , connection, params={'desde': desde, 'hasta': hasta})
+    
+    # multiplicar por -1 los valores de la columna total si el tipo es 'NC' 'NCE'
+    #tabla.loc[tabla['tipo'].str.contains('NC|NCE'), 'total'] = tabla.loc[tabla['tipo'].str.contains('NC|NCE'), 'total'] * -1
+    tabla.loc[tabla['tipo'].isin(['NC', 'NCE']), 'total'] = tabla.loc[tabla['tipo'].isin(['NC', 'NCE']), 'total'] * -1
+    return tabla
+
 
 def obtener_pagos_masivos(ip:str , user:str , password:str , desde:str , hasta:str):
     """
