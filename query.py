@@ -68,7 +68,8 @@ def query_pago(connection:Connection, desde:str, hasta:str):
 
     # Crear query de pagos
     query = text(f"""
-    SELECT cmp_pago_medio.*, cmp_pago.*, iva_persona.razon_social
+    # SELECT cmp_pago_medio.*, cmp_pago.*, iva_persona.razon_social
+    SELECT cmp_pago.numero, cmp_pago.proveedor, iva_persona.razon_social, cmp_pago.fecha, cmp_pago.caja, cmp_pago.cuenta, cmp_pago.tarjeta, cmp_pago.cheque, cmp_pago.cheque_3ro, cmp_pago.certificado, cmp_pago.ctacte, cmp_pago.total, cmp_pago_medio.modalidad, cmp_pago_medio.caja, cmp_pago_medio.cuenta, cmp_pago_medio.tarjeta, cmp_pago_medio.cheque, cmp_pago_medio.cheque_3ro, cmp_pago_medio.certificado, cmp_pago_medio.pago_a_cuenta
     FROM cmp_pago_medio
     LEFT JOIN cmp_pago ON cmp_pago_medio.pago = cmp_pago.numero 
     LEFT JOIN iva_persona ON cmp_pago.proveedor = iva_persona.id
@@ -93,9 +94,10 @@ def query_cobro(connection:Connection, desde:str, hasta:str):
     
     # crear query de cobros
     query = text(f"""
-    SELECT vta_cobro.*, vta_cobro_medio.*, iva_persona.razon_social
+    #SELECT vta_cobro.*, vta_cobro_medio.*, iva_persona.razon_social
+    SELECT vta_cobro.numero, vta_cobro.cliente, iva_persona.razon_social, vta_cobro.fecha, vta_cobro.caja, vta_cobro.cuenta, vta_cobro.tarjeta, vta_cobro.cheque, vta_cobro.cheque_3ro, vta_cobro.certificado, vta_cobro.ctacte, vta_cobro.total, vta_cobro_medio.modalidad, vta_cobro_medio.caja, vta_cobro_medio.cuenta, vta_cobro_medio.tarjeta, vta_cobro_medio.cheque, vta_cobro_medio.cheque_3ro, vta_cobro_medio.certificado, vta_cobro_medio.cobro_a_cuenta
     FROM vta_cobro
-    LEFT JOIN vta_cobro_medio ON vta_cobro.numero = vta_cobro_medio.cliente
+    LEFT JOIN vta_cobro_medio ON vta_cobro.numero = vta_cobro_medio.cobro
     LEFT JOIN iva_persona ON vta_cobro.cliente = iva_persona.id
     where vta_cobro.fecha BETWEEN :desde AND :hasta
     ;""")
