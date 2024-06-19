@@ -167,7 +167,7 @@ def obtener_pagos_masivos(ip:str , user:str , password:str , desde:str , hasta:s
             iva_td_resumen = iva_td_resumen.reset_index()
             
             # Exportar a un mismo excel
-            with pd.ExcelWriter(f'resultados/datos - {i} - {desde} - {hasta}.xlsx') as writer:
+            with pd.ExcelWriter(f'resultados/reporte - {desde} - {hasta} - {i}.xlsx') as writer:
                 iva.to_excel(writer, sheet_name='IVA', index=False)
                 pago.to_excel(writer, sheet_name='Pagos', index=False)
                 cobro.to_excel(writer, sheet_name='Cobros', index=False)
