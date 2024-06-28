@@ -215,5 +215,6 @@ def numero_cmpvta(host:str, user:str, password:str, database:str , tabla:str):
     
     del tabla['numero']
     
-    maximo = int(tabla['comprobante'].max())
-    sig = maximo + 1
+    maximo = int(tabla['comprobante'].max())+1
+    
+    return maximo
