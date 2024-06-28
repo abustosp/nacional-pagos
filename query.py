@@ -179,4 +179,41 @@ def obtener_pagos_masivos(ip:str , user:str , password:str , desde:str , hasta:s
             
     # Cerar conexión
     conección.close()
-        
+
+
+def numero_cmpvta(host:str, user:str, password:str, database:str , tabla:str):
+    """
+    Crear conexión a una base de datos para extraer todos los 'numero' de la tabla cmp_pago o vta_cobro
+
+    Args:
+        host (_type_): ip del servidor de base de datos
+        user (_type_): usuario de la base de datos
+        password (_type_): contraseña del usuario
+        database (_type_): base de datos a la que se desea conectar
+        tabla (_type_): nombre de la tabla de la cual se desea extraer los 'numero'
+    """
+    
+    # crear conexión 
+    con = get_connection(host, database, user, password)
+    
+    # crear query
+    query = text(f"""
+    SELECT numero
+    FROM {tabla};
+    """)
+    
+    # realizar consulta
+    tabla = pd.read_sql_query(query , con)
+    
+    # cerrar conexión
+    con.close()
+    
+    # Separar los valores de la columna 'numero' en 3 columnas 'tipo' 'punto' 'comprobante' que se obtienen de la separación por ' '
+    tabla['tipo'] = tabla['numero'].str.split(' ').str[0]
+    tabla['punto'] = tabla['numero'].str.split(' ').str[1]
+    tabla['comprobante'] = tabla['numero'].str.split(' ').str[2]
+    
+    del tabla['numero']
+    
+    maximo = int(tabla['comprobante'].max())
+    sig = maximo + 1
