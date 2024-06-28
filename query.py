@@ -186,11 +186,11 @@ def numero_cmpvta(host:str, user:str, password:str, database:str , tabla:str):
     Crear conexión a una base de datos para extraer todos los 'numero' de la tabla cmp_pago o vta_cobro
 
     Args:
-        host (_type_): ip del servidor de base de datos
-        user (_type_): usuario de la base de datos
-        password (_type_): contraseña del usuario
-        database (_type_): base de datos a la que se desea conectar
-        tabla (_type_): nombre de la tabla de la cual se desea extraer los 'numero'
+        host (str): ip del servidor de base de datos
+        user (str): usuario de la base de datos
+        password (str): contraseña del usuario
+        database (str): base de datos a la que se desea conectar
+        tabla (str): nombre de la tabla de la cual se desea extraer los 'numero' (cmp_pago o vta_cobro)
     """
     
     # crear conexión 
