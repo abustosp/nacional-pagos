@@ -2,6 +2,20 @@ import sqlalchemy
 from sqlalchemy import create_engine, text
 from sqlalchemy.engine import Connection
 import pandas as pd
+import json
+
+
+def leer_credenciales():
+    """
+    Leer las credenciales de credenciales.json
+    
+    """
+    
+    # leer el archivo de credenciales
+    with open('credenciales.json') as file:
+        credenciales = json.load(file)
+        
+    return credenciales['host'], credenciales['user'], credenciales['password']
 
 
 def listador_de_databases(ip:str , user:str , password:str):
